@@ -1,5 +1,6 @@
 # League of Legends: Match at 20?
 Final Project for EECS 398 Practical Data Science
+Names: Anthony Sun, Wenjia Lu
 
 ## Introduction
 
