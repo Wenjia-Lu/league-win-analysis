@@ -14,7 +14,7 @@ Our dataset of 115152 rows comes from Oracle's Elixir, and contains data on indi
 
 `gameid`: unique identifier for each game
 
-`side`: either 'Red' or 'Blue', indicating where the team starts the game; we have later numerically encoded this to 0 (Blue) and 1 (Red)
+`side`: either 'Red' or 'Blue', indicating which side the team starts on in the game; we have later numerically encoded this to 0 (Blue) and 1 (Red)
 
 `firstherald`: whether the team has secured the first herald; '1' indicates true, '0' indicates false
 
@@ -55,11 +55,8 @@ Here's a preview of our data:
 ## Data Cleaning and Exploratory Data Analysis
 
 ### Data Cleaning
-To prepare the dataset for analysis, the following data preprocessing steps were implemented:
-
-#### Column Selection and Transformation:
-> blah blah
-
+We removed the individual statistics as we only used the teamwide data.
+Additionally, the missing values were imputed as NaN.
 
 After cleaning, we have:
 
@@ -99,21 +96,21 @@ After cleaning, we have:
 We grouped the team data by whether teams won and lost, and we can see a clear pattern that winning teams have higher means in each of the performance metrics selected, lending to the idea that it is possible to have a decent accuracy in whether a team won or lost a game based on their performance metrics.
 
 ### Imputation
-We have not imputed data. Missing values occurred in two cases: (1) when `datacompleteness` was partial and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in values would either oversimplify unique game scenarios or attempt to replace data that never existed. These rows were dropped instead of imputed.
+We imputed missing values as NaN instead of giving it the mean or median values. In this dataset, missing values occurred when (1) our dataset is incomplete and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in missing values would be inappropriate and change the meaning of the missing values, so they were left as is.
 
 ## Framing a Prediction Problem
-With evidence pointing to map side influencing game outcomes, we can explore a prediction problem: What will be the result of the game based on team-aggregate game state at 20 minutes? The 20-minute threshold is a pivotal moment in professional play, often marking the transition from early-game skirmishes to larger, decisive teamfights and map objectives. By investigating the relationship between early-game advantages and eventual match results, this project aims to better understand how reliably teams can convert leads into wins at the highest level of play.
+Through our data analysis, we found a clear pattern that the winning team has higher values in the performance metrics we selected. Hence, we ask the question: What will be the result of the game based on team-aggregate game state at 20 minutes? The 20-minute threshold is a pivotal moment in professional play, often marking the transition from early-game skirmishes to larger, decisive teamfights and map objectives. By investigating the relationship between early-game advantages and eventual match results, we want to see how reliably teams can convert leads into wins at the highest level of play.
 
-The classifier being built performs binary classification, with the response variable being `outcome`, as that determines if a team won the match. Accuracy was chosen as the evaluation metric because it provides a clear measure of the model's performance and is suitable for this dataset, which has balanced classes with one win and one loss per game.
+Our classifier will perform binary classification, with the response variable being `outcome`, or whether the team won the match. Accuracy was chosen as the evaluation metric as it provides a clear measure of our model's performance, with `outcome` having a 50-50 split between winning and losing. 
 
 ### Baseline Model
-The baseline model was trained using logistic regression using the features outlined in the introduction. `side` is a nominal feature, which we performed one hot encoding on to convert to numerical data. The other features were quantative, and were left as is. The dataset was split 80:20 for training and testing.
+Our baseline model is trained using Logistic Regression using the features outlined in the introduction. `side` is a nominal feature, which we performed one hot encoding on to convert to numerical data. The other features were quantative. The dataset was split 80:20 for training and testing.
 
-After fitting the model, the baseline model achieved an accuracy of **0.7780**.
+After fitting the model, the baseline model achieved an accuracy of **0.7780**. The fitting was performanced using Grid Search (similar to our final model in the next section).
 
 In the next section, we will refine this model through feature engineering.
 
 ### Final Model
 We add `kill_diff_10`, `kill_diff_15`, `kill_diff_20`, since just the number of team kills alone are not enough to describe a team's lead- for example, a 10-10 score line of each team's kills is greatly different from a 10-0 score line, even though the first team has the same number of kills and gold.
 
-These enhancements led to better predictive accuracy compared to the baseline model, with a final testing accuracy of **0.7782**, demonstrating slight improvement over the baseline model.
+These enhancements led to better predictive accuracy compared to the baseline model, with a final testing accuracy of **0.7782**, demonstrating slight improvement over the baseline model. We yield this using optimal parameters of C=10 and penalty=l2 with best CV accuracy of 0.7986
