@@ -5,7 +5,7 @@ Final Project for EECS 398 Practical Data Science
 
 In the high-stakes world of professional League of Legends, every second and every decision can tip the balance between victory and defeat. While matches officially conclude when a team’s Nexus is destroyed, competitive outcomes are often shaped much earlier through resource advantages and map control. Among the wealth of in-game data available, four metrics — creep score (CS), gold, map control — consistently stand out as key indicators of a team’s control over the game. Creep Score (CS) tracks how efficiently players are farming minions, a primary source of gold and experience that also reflects the player's mechanical expertise in last-hitting. Gold is used to purchase items, which help teams gain combat advantages. Map control measures a team’s control over the map, which considers factors from vision score (how much of the map is visible thanks to your team's wards?) to objective control (how many heralds or dragons has your team slain?).
 
-This analysis focuses on determining whether it’s possible to predict the final outcome of a match by the 20-minute mark using these performance metrics. The 20-minute threshold is a pivotal moment in professional play, often marking the transition from early-game skirmishes to larger, decisive teamfights and map objectives. By investigating the relationship between early-game advantages and eventual match results, this project aims to better understand how reliably teams can convert leads into wins at the highest level of play.
+This analysis focuses on determining whether it’s possible to predict the final outcome of a match using these performance metrics.
 
 Our dataset of 115152 rows comes from Oracle's Elixir, and contains data on individual player statistics and teamwide statistics in 9596 professional games. We will analyze our data using the teamwide statistics, a total of 19,192 rows of the dataset. The relevant columns we use are as follows:
 
@@ -60,12 +60,6 @@ GRAPH HEREREJLRJELRJSLDKFJSLDKFJSDLFKJSDL:FKJSD:LFKJSL:DFKJ
 
 
 ### Univariate Analysis
-<iframe
-  src="assets/uni_team_cs_per_minute.html"
-  width="700"
-  height="700"
-  frameborder="0"
-></iframe> The histogram displays the distribution of win rates for teams playing on the red side. While the frequency of win rates peaks around 50%, an interesting secondary peak emerges within the 35-45% win rate range, suggesting that starting on the red side may present a disadvantage.
 
 <iframe
   src="assets/uni_team_gold_per_minute.html"
@@ -75,12 +69,6 @@ GRAPH HEREREJLRJELRJSLDKFJSLDKFJSDLFKJSDL:FKJSD:LFKJSL:DFKJ
 ></iframe> a
 
 ### Bivariate Analysis
-<iframe
-  src="assets/bi_team_gold_at_10.html"
-  width="700"
-  height="500"
-  frameborder="0"
-></iframe> a
 
 <iframe
   src="assets/bi_team_vision_score.html"
