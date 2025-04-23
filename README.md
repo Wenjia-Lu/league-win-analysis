@@ -12,7 +12,7 @@ Our dataset of 115152 rows comes from Oracle's Elixir, and contains data on indi
 
 `result`: outcome of a match; '0' indicates defeat, '1' indicates victory
 
-`gameid`: unique identifier for each game.
+`gameid`: unique identifier for each game
 
 `side`: either 'Red' or 'Blue', indicating where the team starts the game; we have later numerically encoded this to 0 (Blue) and 1 (Red)
 
@@ -20,9 +20,9 @@ Our dataset of 115152 rows comes from Oracle's Elixir, and contains data on indi
 
 `heralds`: number of heralds the team has slain
 
-`firstdragon`: whether the team has secured the first dragon
+`firstdragon`: whether the team has secured the first dragon; '1' indicates true, '0' indicates false
 
-`firstblood`: whether the team was the first to slay an enemy player
+`firstblood`: whether the team was the first to slay an enemy player; '1' indicates true, '0' indicates false
 
 `goldatX`: total gold earned for the team at the X-minute mark; indicative of strength in terms of economy, for X = 10, 15, 20
 
@@ -99,7 +99,7 @@ After cleaning, we have:
 We grouped the team data by whether teams won and lost, and we can see a clear pattern that winning teams have higher means in each of the performance metrics selected, lending to the idea that it is possible to have a decent accuracy in whether a team won or lost a game based on their performance metrics.
 
 ### Imputation
-Missing values occurred in two cases: (1) when `datacompleteness` was partial and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in values would either oversimplify unique game scenarios or attempt to replace data that never existed. These rows were dropped instead of imputed.
+We have not imputed data. Missing values occurred in two cases: (1) when `datacompleteness` was partial and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in values would either oversimplify unique game scenarios or attempt to replace data that never existed. These rows were dropped instead of imputed.
 
 ## Framing a Prediction Problem
 With evidence pointing to map side influencing game outcomes, we can explore a prediction problem: What will be the result of the game based on team-aggregate game state at 20 minutes? The 20-minute threshold is a pivotal moment in professional play, often marking the transition from early-game skirmishes to larger, decisive teamfights and map objectives. By investigating the relationship between early-game advantages and eventual match results, this project aims to better understand how reliably teams can convert leads into wins at the highest level of play.
@@ -107,12 +107,13 @@ With evidence pointing to map side influencing game outcomes, we can explore a p
 The classifier being built performs binary classification, with the response variable being `outcome`, as that determines if a team won the match. Accuracy was chosen as the evaluation metric because it provides a clear measure of the model's performance and is suitable for this dataset, which has balanced classes with one win and one loss per game.
 
 ### Baseline Model
-The baseline model was trained using logistic regression using the following features: `side`, `killsdiffat20`,`deathsdiffat20`, `assistsdiffat20`. `side` is a nominal feature, for which one hot encoding was performed upon it. The other features were quantative, and were left as is. The dataset was split 70:30 and training and testing.
+The baseline model was trained using logistic regression using the features outlined in the introduction. `side` is a nominal feature, which we performed one hot encoding on to convert to numerical data. The other features were quantative, and were left as is. The dataset was split 80:20 for training and testing.
 
-After fitting the model, the baseline model achieved an accuracy of **0.7356**.
+After fitting the model, the baseline model achieved an accuracy of **0.7780**.
 
-In the next section, we will refine this model by expanding the feature set to include more strategic metrics, as well as applying appropriate scaling to the quantitative features.
+In the next section, we will refine this model through feature engineering.
 
 ### Final Model
+We add `kill_diff_10`, `kill_diff_15`, `kill_diff_20`, since just the number of team kills alone are not enough to describe a team's lead- for example, a 10-10 score line of each team's kills is greatly different from a 10-0 score line, even though the first team has the same number of kills and gold.
 
-These enhancements provide the model with a more comprehensive understanding of the data, leading to better predictive accuracy and a stronger alignment with the underlying mechanics of match outcomes compared to the baseline model. This is reflected in the final model's accuracy of **0.7** on the test set, demonstrating a clear improvement over the baseline model.
+These enhancements led to better predictive accuracy compared to the baseline model, with a final testing accuracy of **0.7782**, demonstrating slight improvement over the baseline model.
