@@ -10,7 +10,7 @@ This analysis focuses on determining whether it’s possible to predict the fina
 
 Our dataset of 115152 rows comes from Oracle's Elixir, and contains data on individual player statistics and teamwide statistics in 9596 professional games. We will analyze our data using the teamwide statistics, a total of 19,192 rows of the dataset. The relevant columns we use are as follows:
 
-`result`: outcome of a match; '0' indicates defeat, '1' indicates victory
+`result`: outcome of a match; '0' indicates defeat, '1' indicates victory 
 
 `gameid`: unique identifier for each game
 
@@ -55,10 +55,12 @@ Here's a preview of our data:
 ## Data Cleaning and Exploratory Data Analysis
 
 ### Data Cleaning
-We removed the individual statistics as we only used the teamwide data.
-Additionally, the missing values were imputed as NaN.
+We removed rows on individual statistics from our data as our model only uses teamwide data and performed data imputation, as below.
 
-After cleaning, we have:
+### Imputation
+We imputed missing values as NaN instead of the mean or median. In this dataset, missing values occurred when (1) our dataset is incomplete and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in missing values would be inappropriate and change the meaning of the missing values, so they were left as is.
+
+We are left with the following data (preview) after cleaning:
 
 | gameid                | side   | position   | playerid                                  | teamname          | teamid                                  | champion   | ban1   | ban2    | ban3   | ban4   | ban5   |   pick1 |   pick2 |   pick3 |   pick4 |   pick5 |   gamelength |   result |   kills |   deaths |   assists |   doublekills |   triplekills |   quadrakills |   pentakills |   firstblood |   firstbloodkill |   firstbloodassist |   firstbloodvictim |   team kpm |   ckpm |   firstdragon |   dragons |   opp_dragons |   elementaldrakes |   opp_elementaldrakes |   infernals |   mountains |   clouds |   oceans |   chemtechs |   hextechs |   dragons (type unknown) |   elders |   opp_elders |   firstherald |   heralds |   opp_heralds |   void_grubs |   opp_void_grubs |   firstbaron |   barons |   opp_barons |   firsttower |   towers |   opp_towers |   firstmidtower |   firsttothreetowers |   turretplates |   opp_turretplates |   inhibitors |   opp_inhibitors |   damagetochampions |     dpm |   damageshare |   damagetakenperminute |   damagemitigatedperminute |   wardsplaced |    wpm |   wardskilled |   wcpm |   controlwardsbought |   visionscore |   vspm |   totalgold |   earnedgold |   earned gpm |   earnedgoldshare |   goldspent |   gspd |   gpr |   total cs |   minionkills |   monsterkills |   monsterkillsownjungle |   monsterkillsenemyjungle |   cspm |   goldat10 |   xpat10 |   csat10 |   opp_goldat10 |   opp_xpat10 |   opp_csat10 |   golddiffat10 |   xpdiffat10 |   csdiffat10 |   killsat10 |   assistsat10 |   deathsat10 |   opp_killsat10 |   opp_assistsat10 |   opp_deathsat10 |   goldat15 |   xpat15 |   csat15 |   opp_goldat15 |   opp_xpat15 |   opp_csat15 |   golddiffat15 |   xpdiffat15 |   csdiffat15 |   killsat15 |   assistsat15 |   deathsat15 |   opp_killsat15 |   opp_assistsat15 |   opp_deathsat15 |   goldat20 |   xpat20 |   csat20 |   opp_goldat20 |   opp_xpat20 |   opp_csat20 |   golddiffat20 |   xpdiffat20 |   csdiffat20 |   killsat20 |   assistsat20 |   deathsat20 |   opp_killsat20 |   opp_assistsat20 |   opp_deathsat20 |   goldat25 |   xpat25 |   csat25 |   opp_goldat25 |   opp_xpat25 |   opp_csat25 |   golddiffat25 |   xpdiffat25 |   csdiffat25 |   killsat25 |   assistsat25 |   deathsat25 |   opp_killsat25 |   opp_assistsat25 |   opp_deathsat25 |
 |:----------------------|:-------|:-----------|:------------------------------------------|:------------------|:----------------------------------------|:-----------|:-------|:--------|:-------|:-------|:-------|--------:|--------:|--------:|--------:|--------:|-------------:|---------:|--------:|---------:|----------:|--------------:|--------------:|--------------:|-------------:|-------------:|-----------------:|-------------------:|-------------------:|-----------:|-------:|--------------:|----------:|--------------:|------------------:|----------------------:|------------:|------------:|---------:|---------:|------------:|-----------:|-------------------------:|---------:|-------------:|--------------:|----------:|--------------:|-------------:|-----------------:|-------------:|---------:|-------------:|-------------:|---------:|-------------:|----------------:|---------------------:|---------------:|-------------------:|-------------:|-----------------:|--------------------:|--------:|--------------:|-----------------------:|---------------------------:|--------------:|-------:|--------------:|-------:|---------------------:|--------------:|-------:|------------:|-------------:|-------------:|------------------:|------------:|-------:|------:|-----------:|--------------:|---------------:|------------------------:|--------------------------:|-------:|-----------:|---------:|---------:|---------------:|-------------:|-------------:|---------------:|-------------:|-------------:|------------:|--------------:|-------------:|----------------:|------------------:|-----------------:|-----------:|---------:|---------:|---------------:|-------------:|-------------:|---------------:|-------------:|-------------:|------------:|--------------:|-------------:|----------------:|------------------:|-----------------:|-----------:|---------:|---------:|---------------:|-------------:|-------------:|---------------:|-------------:|-------------:|------------:|--------------:|-------------:|----------------:|------------------:|-----------------:|-----------:|---------:|---------:|---------------:|-------------:|-------------:|---------------:|-------------:|-------------:|------------:|--------------:|-------------:|----------------:|------------------:|-----------------:|
@@ -75,7 +77,7 @@ After cleaning, we have:
   width="700"
   height="500"
   frameborder="0"
-></iframe> We plotted a histogram of gold per minute for both teams of every game, and the result is a bimodal distribution, which hints that we are able to discern whether a team won or lost from their gold per minute. This makes a lot of sense, since for each game, the winning team will have more gold than the losing team. The temporal difference is made up for by finding the rate of gold earned.
+></iframe> Gold reflects how much advantage a team has over the other, equipment wise. We plotted a histogram of gold per minute for both teams of every game, and the result is a bimodal distribution, which hints that we are able to discern whether a team won or lost from their gold per minute. This makes sense since for each game, the winning team will have more gold than the losing team. The temporal difference is made up for by finding the rate of gold earned.
 
 ### Bivariate Analysis
 
@@ -84,33 +86,34 @@ After cleaning, we have:
   width="700"
   height="500"
   frameborder="0"
-></iframe> We plotted box plots for the distribution of vision scores based on whether a team won or lost, and we see that a team's vision score can hint at whether a team won. The similar results make sense, as pro teams understand the great importance of vision, and the small increase the winning team has can be attributed to the greater map control that being ahead allows, enabling the winning team to get more wards down deeper on the map.
+></iframe> Vision score reflects how clearly a team can see the others' movements through the fog of war, with higher score meaning better vision. We plotted box plots for the distribution of vision scores based on whether a team won or lost, and we see that a team's vision score can hint at whether a team won. The similar results make sense, as pro teams understand the great importance of vision, and the small increase the winning team has can be attributed to the greater map control that being ahead allows, enabling the winning team to get more wards down deeper on the map.
 
 ### Interesting Aggregates
 
+We grouped the team data by whether teams won and lost:
 
 |   kills |  deaths | team kpm | elementaldrakes |    elders | firstherald | heralds | firstbaron |  barons | firsttower | damagetochampions |     |         |         |          |         |           |          |         |          |         |          |       |
 | ------: | ------: | -------: | --------------: | --------: | ----------: | ------: | ---------: | ------: | ---------: | ----------------: | --- | ------- | ------- | -------- | ------- | --------- | -------- | ------- | -------- | ------- | -------- | ----- |
 | 9.37182 | 19.6339 | 0.291164 |         1.42961 | 0.0219595 |    0.417042 | 0.76708 |    0.14283 | 0.22201 |   0.316535 |           59724.8 |     | 19.6138 | 9.40944 | 0.641958 | 2.95844 | 0.0853041 | 0.582676 | 1.20646 | 0.804711 | 1.12447 | 0.683465 | 73721 |
 
-We grouped the team data by whether teams won and lost, and we can see a clear pattern that winning teams have higher means in each of the performance metrics selected, lending to the idea that it is possible to have a decent accuracy in whether a team won or lost a game based on their performance metrics.
+We can see a clear pattern that winning teams have higher means in each of the performance metrics selected, lending to the idea that it is possible to have a decent accuracy in whether a team won or lost a game based on their performance metrics.
 
-### Imputation
-We imputed missing values as NaN instead of giving it the mean or median values. In this dataset, missing values occurred when (1) our dataset is incomplete and 20-minute data was unavailable, and (2) when games ended before 20 minutes. In both situations, filling in missing values would be inappropriate and change the meaning of the missing values, so they were left as is.
 
 ## Framing a Prediction Problem
 Through our data analysis, we found a clear pattern that the winning team has higher values in the performance metrics we selected. Hence, we ask the question: What will be the result of the game based on team-aggregate game state at 20 minutes? The 20-minute threshold is a pivotal moment in professional play, often marking the transition from early-game skirmishes to larger, decisive teamfights and map objectives. By investigating the relationship between early-game advantages and eventual match results, we want to see how reliably teams can convert leads into wins at the highest level of play.
 
-Our classifier will perform binary classification, with the response variable being `outcome`, or whether the team won the match. Accuracy was chosen as the evaluation metric as it provides a clear measure of our model's performance, with `outcome` having a 50-50 split between winning and losing. 
+Our classifier will perform binary classification, with the response variable being `outcome` aka. whether the team won the match. Accuracy was chosen as the evaluation metric as it provides a clear measure of our model's performance, with `outcome` having a 50-50 split between winning and losing. 
 
 ### Baseline Model
-Our baseline model is trained using Logistic Regression using the features outlined in the introduction. `side` is a nominal feature, which we performed one hot encoding on to convert to numerical data. The other features were quantative. The dataset was split 80:20 for training and testing.
+Our baseline model is trained using Logistic Regression using the features outlined in the introduction. `side` is a nominal feature, which we performed one hot encoding on to convert to numerical data. The rest of our features, such as gold and vision score, were quantative. The dataset was split 80:20 for training and testing.
 
-After fitting the model, the baseline model achieved an accuracy of **0.7780**. The fitting was performanced using Grid Search (similar to our final model in the next section).
+We fit our performance using Grid Search. 
+After fitting the model, the baseline model achieved an accuracy of **0.7780**. 
+This demonstrates a good baseline with a significant accuracy for predicting game outcomes given the first 20 minutes of gameplay.
 
 In the next section, we will refine this model through feature engineering.
 
 ### Final Model
-We add `kill_diff_10`, `kill_diff_15`, `kill_diff_20`, since just the number of team kills alone are not enough to describe a team's lead- for example, a 10-10 score line of each team's kills is greatly different from a 10-0 score line, even though the first team has the same number of kills and gold.
+We add `kill_diff_10`, `kill_diff_15`, `kill_diff_20`to our Logistic Regression baseline model, since just the number of team kills alone are not enough to describe a team's lead- for example, a 10-10 score line of each team's kills is greatly different from a 10-0 score line, even though the first team has the same number of kills and gold.
 
 These enhancements led to better predictive accuracy compared to the baseline model, with a final testing accuracy of **0.7782**, demonstrating slight improvement over the baseline model. We yield this using optimal parameters of C=10 and penalty=l2 with best CV accuracy of 0.7986
