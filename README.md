@@ -1,10 +1,10 @@
-# League of Legends: Match at 20?
+# League of Legends Match Outcome Predictor
 Final Project for EECS 398 Practical Data Science
 Names: Anthony Sun, Wenjia Lu
 
 ## Introduction
 
-In the high-stakes world of professional League of Legends, every second and every decision can tip the balance between victory and defeat. While matches officially conclude when a team’s Nexus is destroyed, competitive outcomes are often shaped much earlier through resource advantages and map control. Among the wealth of in-game data available, four metrics — creep score (CS), gold, map control — consistently stand out as key indicators of a team’s control over the game. Creep Score (CS) tracks how efficiently players are farming minions, a primary source of gold and experience that also reflects the player's mechanical expertise in last-hitting. Gold is used to purchase items, which help teams gain combat advantages. Map control measures a team’s control over the map, which considers factors from vision score (how much of the map is visible thanks to your team's wards?) to objective control (how many heralds or dragons has your team slain?).
+In the high-stakes world of professional League of Legends, every second and every decision can tip the balance between victory and defeat. While matches officially conclude when a team’s Nexus is destroyed, competitive outcomes are often shaped much earlier through resource advantages and map control. Among the wealth of in-game data available, three metrics — creep score (CS), gold, map control — consistently stand out as key indicators of a team’s control over the game. Creep Score (CS) tracks how efficiently players are farming minions, a primary source of gold and experience that also reflects the player's mechanical expertise in last-hitting. Gold is used to purchase items, which help teams gain combat advantages. Map control measures a team’s control over the map, which considers factors from vision score (how much of the map is visible thanks to your team's wards?) to objective control (how many heralds or dragons has your team slain?).
 
 This analysis focuses on determining whether it’s possible to predict the final outcome of a match using these performance metrics.
 
