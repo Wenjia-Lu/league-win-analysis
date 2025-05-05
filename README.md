@@ -1,5 +1,6 @@
 # League of Legends Match Outcome Predictor
 Final Project for EECS 398 Practical Data Science
+
 Names: Anthony Sun, Wenjia Lu
 
 ## Introduction
