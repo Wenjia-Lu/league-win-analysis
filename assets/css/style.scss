@@ -14,12 +14,12 @@ border-collapse: collapse;
 }
 
 code.highlighter-rouge {
-    color: #803454 !important;
-    font-weight: bold;
+    color: #cd596b !important;
+    font-weight: bold !important;
 }
 
 div.plotly-graph-div.js-plotly-plot {
-    border: 1px solid #607c9c;
-    border-radius: 8px;
-    overflow: hidden;
+    border: 4px solid #607c9c !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
 }
