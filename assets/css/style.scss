@@ -3,20 +3,13 @@
 
 @import "{{ site.theme }}";
 
-.table-container table {
-    overflow-x: auto;
-    max-width: 100%;
-    width: max-content;
-    border-collapse: collapse;
+// .table-container table 
+table {
+    display: block !important;
+    overflow: auto;
 }
 
 code.highlighter-rouge {
-    color: #cd596b !important;
+    color: #a5497e !important;
     font-weight: bold !important;
-}
-
-div.js-plotly-plot {
-    border: 8px solid #607c9c !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
 }
