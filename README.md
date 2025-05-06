@@ -88,6 +88,8 @@ We first analyzed the distribution of gold earned per minute for the 2 teams.
 
 Having quantified the resource advantage, we then analyzed the map control advantage using team vision scores.
 
+## Univariate Analysis
+
 <iframe
   src="assets/bi_team_vision_score.html"
   width="700"

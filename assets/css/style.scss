@@ -3,14 +3,11 @@
 
 @import "{{ site.theme }}";
 
-.table-container {
+.table-container table {
     overflow-x: auto;
     max-width: 100%;
-  }
-  
-.table-container table {
-width: max-content;
-border-collapse: collapse;
+    width: max-content;
+    border-collapse: collapse;
 }
 
 code.highlighter-rouge {
@@ -18,8 +15,8 @@ code.highlighter-rouge {
     font-weight: bold !important;
 }
 
-div.plotly-graph-div.js-plotly-plot {
-    border: 4px solid #607c9c !important;
+div.js-plotly-plot {
+    border: 8px solid #607c9c !important;
     border-radius: 8px !important;
     overflow: hidden !important;
 }
