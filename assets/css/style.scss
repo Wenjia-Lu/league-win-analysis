@@ -10,12 +10,12 @@ width: max-content;
 border-collapse: collapse;
 }
 
-code {
-    color: #803454;
+code.highlighter-rouge {
+    color: #803454 !important;
     font-weight: bold;
 }
 
-.framed {
+div.plotly-graph-div.js-plotly-plot {
     border: 1px solid #607c9c;
     border-radius: 8px;
     overflow: hidden
