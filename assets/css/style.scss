@@ -1,3 +1,6 @@
+---
+---
+
 @import "{{ site.theme }}";
 
 .table-container {
@@ -18,5 +21,5 @@ code.highlighter-rouge {
 div.plotly-graph-div.js-plotly-plot {
     border: 1px solid #607c9c;
     border-radius: 8px;
-    overflow: hidden
+    overflow: hidden;
 }
