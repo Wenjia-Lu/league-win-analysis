@@ -1,0 +1,22 @@
+@import "{{ site.theme }}";
+
+.table-container {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  
+.table-container table {
+width: max-content;
+border-collapse: collapse;
+}
+
+code {
+    color: #803454;
+    font-weight: bold;
+}
+
+.framed {
+    border: 1px solid #607c9c;
+    border-radius: 8px;
+    overflow: hidden
+}
